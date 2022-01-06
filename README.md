@@ -5,6 +5,10 @@ A backdoor manager written in python. This script is useful in interacting with 
 ![Python](https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=darkgreen)
 ![Shell](https://img.shields.io/badge/Shell_Script-121011?style=for-the-badge&logo=gnu-bash&logoColor=white)
 
+
+## Important Note
+<b>This tool is for educational and ethical practices only. The developers are not responsible if the tool is misused by an individual</b>
+
 # Tested On
 ![Manjaro](https://img.shields.io/badge/manjaro-35BF5C?style=for-the-badge&logo=manjaro&logoColor=white)
 
